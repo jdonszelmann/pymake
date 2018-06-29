@@ -1,0 +1,10 @@
+#!/usr/bin/python3
+
+import sys
+import make.backend as make
+
+if __name__ == '__main__':
+	args = make.parse_args(sys.argv)
+	make.makeargs(args)
+
+
