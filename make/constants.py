@@ -16,3 +16,5 @@ ARCHITECTURE = platform.machine()
 #options: often the same as ARCHITECTURE
 CPU = platform.processor()
 CD = folder(os.getcwd())
+
+
