@@ -47,7 +47,10 @@ def link():
 
 @rule
 def install():
-	pass
+	shell("sudo apt-get install libboost-all-dev -y")
+	shell("sudo apt-get install aptitude -y")
+	shell("aptitude search boost")
+	shell("sudo apt-get install nasm gcc valgrind gdb -y")
 
 @rule
 def all():

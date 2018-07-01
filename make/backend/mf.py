@@ -24,6 +24,11 @@ def find_makefile():
 			return i
 
 def read_makefile(file):
+	def my_exchandler(type, value, traceback):
+		print(value)
+
+	sys.excepthook = my_exchandler
+
 	if version == 0:
 		makefile = imp.load_source('makefile', file)
 	elif version == 1:

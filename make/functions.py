@@ -1,6 +1,9 @@
-import sys,os,re,inspect,collections
+import sys,os,re,inspect,collections,subprocess
 from .filesystem import *
 
+
+class CommandNotFoundError(OSError):
+	pass
 
 def pathjoin(*args):
 	args = [i if type(i) != folder else i.path for i in args ]
@@ -62,22 +65,41 @@ def shell(command,scope=None):
 		scope = inspect.currentframe().f_back.f_globals
 		scope.update(inspect.currentframe().f_back.f_locals)
 	res = format_command(command,scope)
-	os.system("".join(res))
+	
+	ret = subprocess.run("".join(res), stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)
+	if ret.returncode == 127:
+		raise CommandNotFoundError
+	elif ret.returncode != 0:
+		subprocess.run("".join(res),shell=True)
+		raise OSError("command returned exit status of {}".format(ret.returncode))
+	print(ret.stdout.decode("utf-8").strip())
 
 def shellecho(command,scope=None):
 	if scope == None: 
 		scope = inspect.currentframe().f_back.f_globals
 		scope.update(inspect.currentframe().f_back.f_locals)
 	res = format_command(command,scope)
+	ret = subprocess.run("".join(res), stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)
+	if ret.returncode == 127:
+		raise CommandNotFoundError
+	elif ret.returncode != 0:
+		subprocess.run("".join(res),shell=True)
+		raise OSError("command returned exit status of {}".format(ret.returncode))
 	print("".join(res))
-	os.system("".join(res))
+	print(ret.stdout.decode("utf-8").strip())
 
 def echo(command,scope=None):
 	if scope == None: 
 		scope = inspect.currentframe().f_back.f_globals
 		scope.update(inspect.currentframe().f_back.f_locals)
 	res = format_command(command,scope)
-	os.system("echo " + "".join(res))
+	ret = subprocess.run("echo " + "".join(res), stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)
+	if ret.returncode == 127:
+		raise CommandNotFoundError
+	elif ret.returncode != 0:
+		subprocess.run("".join(res),shell=True)
+		raise OSError("command returned exit status of {}".format(ret.returncode))
+	print(ret.stdout.decode("utf-8").strip(),end="")
 
 def apply(function,*iterables):
 	for i in zip(*iterables):

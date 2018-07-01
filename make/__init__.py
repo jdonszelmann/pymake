@@ -4,6 +4,7 @@ import os,sys,inspect
 from .filesystem import *
 from .constants import *
 from .functions import *
+from .compile import *
 
 class _rule(object):
 	def __init__(self,name,func):

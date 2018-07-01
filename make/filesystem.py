@@ -19,7 +19,7 @@ def listdir_fullpath(d):
 
 class folder:
 	def __init__(self,path=os.getcwd()):
-		if not os.path.exists(path):
+		if not os.path.exists(os.path.dirname(path)):
 			from .backend import argparser
 			if not argparser.parse_args(sys.argv).yes:
 				print("{} does not yet exist. do you want to make it? [Y/n]".format(path))
